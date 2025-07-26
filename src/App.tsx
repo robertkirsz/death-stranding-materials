@@ -35,23 +35,14 @@ function App() {
     }
   ])
 
-  const toggleMaterial = (materialIndex: number, size: number) => {
+  const addMaterial = (materialIndex: number, size: number) => {
+    // Update materials state to show count
     setMaterials(prev => {
       const newMaterials = [...prev]
       const material = { ...newMaterials[materialIndex] }
       const selected = { ...material.selected }
 
-      if (selected[size]) {
-        // Decrease count or remove if count is 1
-        if (selected[size] === 1) {
-          delete selected[size]
-        } else {
-          selected[size] = selected[size] - 1
-        }
-      } else {
-        // Add new selection
-        selected[size] = 1
-      }
+      selected[size] = (selected[size] || 0) + 1
 
       material.selected = selected
       newMaterials[materialIndex] = material
@@ -71,15 +62,24 @@ function App() {
     }, 0)
   }
 
-  const formatSelection = (material: Material) => {
-    const entries = Object.entries(material.selected)
-    if (entries.length === 0) return ''
+  const removeWeight = (materialIndex: number, size: number) => {
+    setMaterials(prev => {
+      const newMaterials = [...prev]
+      const material = { ...newMaterials[materialIndex] }
+      const selected = { ...material.selected }
 
-    return entries
-      .map(([size, count]) => {
-        return count > 1 ? `${count} x ${size}` : size
-      })
-      .join(' + ')
+      if (selected[size]) {
+        if (selected[size] === 1) {
+          delete selected[size]
+        } else {
+          selected[size] = selected[size] - 1
+        }
+      }
+
+      material.selected = selected
+      newMaterials[materialIndex] = material
+      return newMaterials
+    })
   }
 
   return (
@@ -98,8 +98,19 @@ function App() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                 <h2 className="text-xl font-semibold text-white mb-2 sm:mb-0">{material.name}</h2>
                 <div className="flex items-center space-x-4">
+                  {/* Selection Summary */}
                   {Object.keys(material.selected).length > 0 && (
-                    <span className="text-ds-green text-sm">{formatSelection(material)}</span>
+                    <div className="flex flex-wrap gap-1 text-sm">
+                      {Object.entries(material.selected).map(([size, count]) => (
+                        <button
+                          key={size}
+                          onClick={() => removeWeight(materialIndex, parseInt(size))}
+                          className="text-ds-green hover:text-ds-red transition-colors duration-200 cursor-pointer"
+                        >
+                          {count > 1 ? `${count} x ${size}` : size}
+                        </button>
+                      ))}
+                    </div>
                   )}
                   <span className="text-ds-orange font-semibold">Total: {getTotalForMaterial(material)}</span>
                 </div>
@@ -109,11 +120,11 @@ function App() {
                 {material.sizes.map(size => (
                   <button
                     key={size}
-                    onClick={() => toggleMaterial(materialIndex, size)}
-                    className={`ds-button ${material.selected[size] ? 'ds-button-active' : ''}`}
+                    onClick={() => addMaterial(materialIndex, size)}
+                    className="ds-button hover:bg-ds-blue hover:border-ds-blue transition-all duration-200"
                   >
                     {size}
-                    {material.selected[size] && material.selected[size] > 1 && (
+                    {material.selected[size] && material.selected[size] > 0 && (
                       <span className="ml-1 text-xs">({material.selected[size]})</span>
                     )}
                   </button>
