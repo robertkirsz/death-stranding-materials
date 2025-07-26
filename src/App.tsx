@@ -176,45 +176,47 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-ds-dark p-4">
+    <div className="min-h-screen bg-ds-dark p-2 sm:p-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-ds-blue ds-text-glow mb-2">Death Stranding Materials Tracker</h1>
-          <p className="text-ds-cyan text-lg">Track your materials for the journey ahead</p>
+        <div className="text-center mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ds-blue ds-text-glow mb-1 sm:mb-2">
+            Death Stranding Materials Tracker
+          </h1>
+          <p className="text-ds-cyan text-sm sm:text-base">Track your materials for the journey ahead</p>
         </div>
 
         {/* Materials Grid */}
-        <div className="space-y-6">
+        <div className="space-y-3 sm:space-y-4">
           {materials.map((material, materialIndex) => (
-            <div key={material.name} className="ds-card">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                <h2 className="text-xl font-semibold text-white mb-2 sm:mb-0">{material.name}</h2>
-                <div className="flex items-center space-x-4">
-                  {/* Selection Summary */}
-                  {Object.keys(material.selected).length > 0 && (
-                    <div className="flex flex-wrap gap-1 text-sm">
-                      {Object.entries(material.selected).map(([size, count]) => (
-                        <button
-                          key={size}
-                          onClick={() => removeWeight(materialIndex, parseInt(size))}
-                          className="text-ds-green hover:text-ds-red transition-colors duration-200 cursor-pointer"
-                        >
-                          {count > 1 ? `${count} x ${size}` : size}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <span className="text-ds-orange font-semibold">Total: {getTotalForMaterial(material)}</span>
-                </div>
+            <div key={material.name} className="ds-card p-3 sm:p-4">
+              {/* Name and Total in one row */}
+              <div className="flex flex-row items-center justify-between mb-1">
+                <h2 className="text-lg sm:text-xl font-semibold text-white">{material.name}</h2>
+                <span className="text-ds-orange font-semibold text-sm sm:text-base">
+                  Total: {getTotalForMaterial(material)}
+                </span>
               </div>
-
-              <div className="flex flex-wrap gap-2">
+              {/* Selection Summary below */}
+              {Object.keys(material.selected).length > 0 && (
+                <div className="flex flex-wrap gap-1 text-xs sm:text-sm mb-2">
+                  {Object.entries(material.selected).map(([size, count]) => (
+                    <button
+                      key={size}
+                      onClick={() => removeWeight(materialIndex, parseInt(size))}
+                      className="text-ds-green hover:text-ds-red transition-colors duration-200 cursor-pointer"
+                    >
+                      {count > 1 ? `${count} x ${size}` : size}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="flex flex-wrap gap-1 sm:gap-2">
                 {material.sizes.map(size => (
                   <button
                     key={size}
                     onClick={() => addMaterial(materialIndex, size)}
-                    className="ds-button hover:bg-ds-blue hover:border-ds-blue transition-all duration-200"
+                    className="ds-button hover:bg-ds-blue hover:border-ds-blue transition-all duration-200 text-sm px-2 py-1 sm:px-4 sm:py-2"
                   >
                     {size}
                     {material.selected[size] && material.selected[size] > 0 && (
@@ -228,18 +230,20 @@ function App() {
         </div>
 
         {/* Total Section */}
-        <div className="ds-card mt-8 text-center">
-          <h3 className="text-2xl font-bold text-ds-green mb-2">Total Materials: {getTotalForAllMaterials()}</h3>
-          <p className="text-ds-cyan text-sm">Keep on keeping on, Sam</p>
+        <div className="ds-card mt-4 sm:mt-6 text-center p-3 sm:p-4">
+          <h3 className="text-xl sm:text-2xl font-bold text-ds-green mb-1 sm:mb-2">
+            Total Materials: {getTotalForAllMaterials()}
+          </h3>
+          <p className="text-ds-cyan text-xs sm:text-sm">Keep on keeping on, Sam</p>
         </div>
 
         {/* Reset Button */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-4 sm:mt-6">
           <button
             onClick={resetMaterials}
-            className="bg-ds-red border border-ds-red text-white px-6 py-3 rounded-lg 
+            className="bg-ds-red border border-ds-red text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg 
                      hover:bg-red-700 hover:border-red-700 transition-all duration-200
-                     focus:outline-none focus:ring-2 focus:ring-ds-red focus:ring-opacity-50"
+                     focus:outline-none focus:ring-2 focus:ring-ds-red focus:ring-opacity-50 text-sm sm:text-base"
           >
             Reset All Materials
           </button>
