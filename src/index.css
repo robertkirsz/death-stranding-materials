@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-ds-dark text-white font-ds;
+    margin: 0;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .ds-button {
+    @apply bg-ds-gray border border-ds-light-gray text-white px-4 py-2 rounded-lg 
+           hover:bg-ds-light-gray hover:border-ds-blue transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50;
+  }
+
+  .ds-button-active {
+    @apply bg-ds-blue border-ds-blue text-white shadow-lg;
+    box-shadow: 0 0 10px rgba(74, 158, 255, 0.5);
+  }
+
+  .ds-card {
+    @apply bg-ds-gray border border-ds-light-gray rounded-lg p-4 shadow-lg;
+  }
+
+  .ds-text-glow {
+    text-shadow: 0 0 10px rgba(74, 158, 255, 0.8);
+  }
+}
