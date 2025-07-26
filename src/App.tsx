@@ -7,33 +7,85 @@ interface Material {
 }
 
 function App() {
-  const [materials, setMaterials] = useState<Material[]>([
-    {
-      name: 'Ceramics',
-      sizes: [40, 80, 160, 320, 480, 640, 800],
-      selected: {}
-    },
-    {
-      name: 'Chemicals',
-      sizes: [30, 60, 120, 240, 360, 480, 600],
-      selected: {}
-    },
-    {
-      name: 'Metals',
-      sizes: [50, 100, 200, 400, 600, 800, 1000],
-      selected: {}
-    },
-    {
-      name: 'Resins',
-      sizes: [40, 80, 160, 320, 480, 640, 800],
-      selected: {}
-    },
-    {
-      name: 'Special Alloys',
-      sizes: [60, 120, 240, 480, 720, 960, 1200],
-      selected: {}
+  // Load initial state from localStorage or use default
+  const getInitialMaterials = (): Material[] => {
+    const saved = localStorage.getItem('death-stranding-materials')
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved)
+        // Ensure all materials have the correct structure
+        return [
+          {
+            name: 'Ceramics',
+            sizes: [40, 80, 160, 320, 480, 640, 800],
+            selected: parsed[0]?.selected || {}
+          },
+          {
+            name: 'Chemicals',
+            sizes: [30, 60, 120, 240, 360, 480, 600],
+            selected: parsed[1]?.selected || {}
+          },
+          {
+            name: 'Metals',
+            sizes: [50, 100, 200, 400, 600, 800, 1000],
+            selected: parsed[2]?.selected || {}
+          },
+          {
+            name: 'Resins',
+            sizes: [40, 80, 160, 320, 480, 640, 800],
+            selected: parsed[3]?.selected || {}
+          },
+          {
+            name: 'Special Alloys',
+            sizes: [60, 120, 240, 480, 720, 960, 1200],
+            selected: parsed[4]?.selected || {}
+          }
+        ]
+      } catch (error) {
+        console.error('Failed to parse saved materials:', error)
+      }
     }
-  ])
+
+    // Default state if no saved data
+    return [
+      {
+        name: 'Ceramics',
+        sizes: [40, 80, 160, 320, 480, 640, 800],
+        selected: {}
+      },
+      {
+        name: 'Chemicals',
+        sizes: [30, 60, 120, 240, 360, 480, 600],
+        selected: {}
+      },
+      {
+        name: 'Metals',
+        sizes: [50, 100, 200, 400, 600, 800, 1000],
+        selected: {}
+      },
+      {
+        name: 'Resins',
+        sizes: [40, 80, 160, 320, 480, 640, 800],
+        selected: {}
+      },
+      {
+        name: 'Special Alloys',
+        sizes: [60, 120, 240, 480, 720, 960, 1200],
+        selected: {}
+      }
+    ]
+  }
+
+  const [materials, setMaterials] = useState<Material[]>(getInitialMaterials)
+
+  // Save materials to localStorage whenever they change
+  const saveMaterials = (newMaterials: Material[]) => {
+    try {
+      localStorage.setItem('death-stranding-materials', JSON.stringify(newMaterials))
+    } catch (error) {
+      console.error('Failed to save materials to localStorage:', error)
+    }
+  }
 
   const addMaterial = (materialIndex: number, size: number) => {
     // Update materials state to show count
@@ -46,6 +98,10 @@ function App() {
 
       material.selected = selected
       newMaterials[materialIndex] = material
+
+      // Save to localStorage
+      saveMaterials(newMaterials)
+
       return newMaterials
     })
   }
@@ -78,8 +134,45 @@ function App() {
 
       material.selected = selected
       newMaterials[materialIndex] = material
+
+      // Save to localStorage
+      saveMaterials(newMaterials)
+
       return newMaterials
     })
+  }
+
+  const resetMaterials = () => {
+    const resetMaterials: Material[] = [
+      {
+        name: 'Ceramics',
+        sizes: [40, 80, 160, 320, 480, 640, 800],
+        selected: {}
+      },
+      {
+        name: 'Chemicals',
+        sizes: [30, 60, 120, 240, 360, 480, 600],
+        selected: {}
+      },
+      {
+        name: 'Metals',
+        sizes: [50, 100, 200, 400, 600, 800, 1000],
+        selected: {}
+      },
+      {
+        name: 'Resins',
+        sizes: [40, 80, 160, 320, 480, 640, 800],
+        selected: {}
+      },
+      {
+        name: 'Special Alloys',
+        sizes: [60, 120, 240, 480, 720, 960, 1200],
+        selected: {}
+      }
+    ]
+
+    setMaterials(resetMaterials)
+    localStorage.removeItem('death-stranding-materials')
   }
 
   return (
@@ -138,6 +231,18 @@ function App() {
         <div className="ds-card mt-8 text-center">
           <h3 className="text-2xl font-bold text-ds-green mb-2">Total Materials: {getTotalForAllMaterials()}</h3>
           <p className="text-ds-cyan text-sm">Keep on keeping on, Sam</p>
+        </div>
+
+        {/* Reset Button */}
+        <div className="text-center mt-6">
+          <button
+            onClick={resetMaterials}
+            className="bg-ds-red border border-ds-red text-white px-6 py-3 rounded-lg 
+                     hover:bg-red-700 hover:border-red-700 transition-all duration-200
+                     focus:outline-none focus:ring-2 focus:ring-ds-red focus:ring-opacity-50"
+          >
+            Reset All Materials
+          </button>
         </div>
       </div>
     </div>
