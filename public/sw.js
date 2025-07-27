@@ -1,5 +1,5 @@
 const CACHE_NAME = 'death-stranding-materials-v1'
-const urlsToCache = ['/', '/index.html', '/manifest.json', '/icon.webp']
+const urlsToCache = ['/', '/index.html', '/manifest.json', '/icon.png']
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)))
