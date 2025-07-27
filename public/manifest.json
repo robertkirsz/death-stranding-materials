@@ -3,7 +3,7 @@
   "short_name": "DS Materials",
   "description": "Track your materials for the journey ahead in Death Stranding",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#0a0a0a",
   "theme_color": "#4a9eff",
   "orientation": "portrait-primary",

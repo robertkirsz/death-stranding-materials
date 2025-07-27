@@ -161,14 +161,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-ds-dark p-2 sm:p-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto flex flex-col gap-4 sm:gap-6">
         {/* Materials Grid */}
-        <div className="space-y-3 sm:space-y-4">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {materials.map((material, materialIndex) => (
-            <div key={material.name} className="ds-card p-3 sm:p-4">
+            <div key={material.name} className="ds-card p-3 sm:p-4 flex flex-col gap-3">
               {/* Name and Total */}
-              <div className="flex flex-row items-center justify-between mb-3">
+              <div className="flex flex-row items-center justify-between">
                 <h2 className="text-lg sm:text-xl font-semibold text-white">{material.name}</h2>
+
                 <span className="text-ds-orange font-semibold text-sm sm:text-base">
                   Total: {getTotalForMaterial(material)}
                   {(() => {
@@ -181,7 +182,7 @@ function App() {
               </div>
 
               {/* Input Field */}
-              <div className="flex gap-2 mb-3">
+              <div className="flex gap-2">
                 <input
                   type="number"
                   value={inputValues[material.name] || ''}
@@ -191,6 +192,7 @@ function App() {
                            focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50"
                   onKeyDown={e => e.key === 'Enter' && submitValue(materialIndex)}
                 />
+
                 <button
                   onClick={() => submitValue(materialIndex)}
                   className="bg-ds-blue border border-ds-blue text-white px-4 py-2 rounded-lg 
@@ -202,24 +204,22 @@ function App() {
 
               {/* Submitted Values */}
               {material.submittedValues.length > 0 && (
-                <div className="mb-3">
-                  <div className="text-ds-green text-sm mb-2">Submitted values:</div>
-                  <div className="flex flex-wrap items-center gap-1">
-                    {material.submittedValues.map((value, index) => (
-                      <div key={index} className="flex items-center">
-                        <button
-                          onClick={() => removeSubmittedValue(materialIndex, index)}
-                          className="bg-ds-green text-black px-2 py-1 rounded text-sm hover:bg-green-400 transition-colors duration-200"
-                        >
-                          {value}
-                        </button>
-                        {index < material.submittedValues.length - 1 && <span className="text-ds-green mx-1">+</span>}
-                      </div>
-                    ))}
-                    <span className="text-ds-cyan ml-2">
-                      = {material.submittedValues.reduce((sum, val) => sum + val, 0)}
-                    </span>
-                  </div>
+                <div className="flex flex-wrap items-center gap-1">
+                  {material.submittedValues.map((value, index) => (
+                    <div key={index} className="flex items-center">
+                      <button
+                        onClick={() => removeSubmittedValue(materialIndex, index)}
+                        className="bg-ds-green text-black px-2 py-1 rounded text-sm hover:bg-green-400 transition-colors duration-200"
+                      >
+                        {value}
+                      </button>
+                      {index < material.submittedValues.length - 1 && <span className="text-ds-green mx-1">+</span>}
+                    </div>
+                  ))}
+
+                  <span className="text-ds-cyan ml-2">
+                    = {material.submittedValues.reduce((sum, val) => sum + val, 0)}
+                  </span>
                 </div>
               )}
 
@@ -238,7 +238,7 @@ function App() {
         </div>
 
         {/* Reset Button */}
-        <div className="text-center mt-4 sm:mt-6">
+        <div className="text-center">
           <button
             onClick={resetMaterials}
             className="bg-ds-red border border-ds-red text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg 
