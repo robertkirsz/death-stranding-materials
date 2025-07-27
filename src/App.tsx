@@ -189,7 +189,7 @@ function App() {
                   placeholder="Enter value..."
                   className="flex-1 bg-ds-gray border border-ds-light-gray text-white px-3 py-2 rounded-lg 
                            focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50"
-                  onKeyPress={e => e.key === 'Enter' && submitValue(materialIndex)}
+                  onKeyDown={e => e.key === 'Enter' && submitValue(materialIndex)}
                 />
                 <button
                   onClick={() => submitValue(materialIndex)}

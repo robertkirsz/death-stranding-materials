@@ -1,0 +1,28 @@
+{
+  "name": "Death Stranding Materials Tracker",
+  "short_name": "DS Materials",
+  "description": "Track your materials for the journey ahead in Death Stranding",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#4a9eff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "games"],
+  "lang": "en",
+  "dir": "ltr"
+}
