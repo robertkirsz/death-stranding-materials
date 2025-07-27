@@ -187,7 +187,7 @@ function App() {
                   value={inputValues[material.name] || ''}
                   onChange={e => setInputValues(prev => ({ ...prev, [material.name]: e.target.value }))}
                   placeholder="Enter value..."
-                  className="flex-1 bg-ds-gray border border-ds-light-gray text-white px-3 py-2 rounded-lg 
+                  className="min-w-0 flex-1 bg-ds-gray border border-ds-light-gray text-white px-3 py-2 rounded-lg 
                            focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50"
                   onKeyDown={e => e.key === 'Enter' && submitValue(materialIndex)}
                 />
@@ -225,15 +225,12 @@ function App() {
 
               {/* Recommended Sizes */}
               {Object.keys(material.selected).length > 0 && (
-                <div>
-                  <div className="text-ds-orange text-sm mb-2">Recommended sizes:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(material.selected).map(([size, count]) => (
-                      <span key={size} className="bg-ds-orange text-black px-2 py-1 rounded text-sm">
-                        {count} x {size}
-                      </span>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(material.selected).map(([size, count]) => (
+                    <span key={size} className="bg-ds-orange text-black px-2 py-1 rounded text-sm">
+                      {count} x {size}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
