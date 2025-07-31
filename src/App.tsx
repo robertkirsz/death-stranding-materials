@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import pkg from '../package.json'
+import ErrorTest from './ErrorTest'
 
 const APP_VERSION = pkg.version
 
@@ -42,24 +43,30 @@ const MATERIALS_CONFIG = [
 function App() {
   // Load initial state from localStorage or use default
   const getInitialMaterials = (): Material[] => {
-    const saved = localStorage.getItem('death-stranding-materials')
+    try {
+      const saved = localStorage.getItem('death-stranding-materials')
 
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        // Ensure all materials have the correct structure
-        return MATERIALS_CONFIG.map((config, index) => ({
-          name: config.name,
-          sizes: config.sizes,
-          selected: parsed[index]?.selected || {},
-          submittedValues: parsed[index]?.submittedValues || []
-        }))
-      } catch (error) {
-        console.error('Failed to parse saved materials:', error)
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          // Ensure all materials have the correct structure
+          return MATERIALS_CONFIG.map((config, index) => ({
+            name: config.name,
+            sizes: config.sizes,
+            selected: parsed[index]?.selected || {},
+            submittedValues: parsed[index]?.submittedValues || []
+          }))
+        } catch (error) {
+          console.error('Failed to parse saved materials:', error)
+          // Clear corrupted data
+          localStorage.removeItem('death-stranding-materials')
+        }
       }
+    } catch (error) {
+      console.error('localStorage is not available:', error)
     }
 
-    // Default state if no saved data
+    // Default state if no saved data or error occurred
     return MATERIALS_CONFIG.map(config => ({
       name: config.name,
       sizes: config.sizes,
@@ -71,7 +78,19 @@ function App() {
   const [materials, setMaterials] = useState<Material[]>(getInitialMaterials)
   const [inputValues, setInputValues] = useState<{ [key: string]: string }>({})
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [showErrorTest, setShowErrorTest] = useState<string | false>(false)
   const settingsRef = useRef<HTMLDivElement>(null)
+
+  // Handle initialization errors
+  useEffect(() => {
+    try {
+      // Test if the app can access localStorage
+      localStorage.setItem('app-test', 'test')
+      localStorage.removeItem('app-test')
+    } catch (error) {
+      console.error('localStorage is not available during initialization:', error)
+    }
+  }, [])
 
   // Handle click outside to close settings menu
   useEffect(() => {
@@ -101,6 +120,7 @@ function App() {
       localStorage.setItem('death-stranding-materials', JSON.stringify(newMaterials))
     } catch (error) {
       console.error('Failed to save materials to localStorage:', error)
+      // If localStorage fails, we can't save but the app should still work
     }
   }
 
@@ -257,11 +277,40 @@ function App() {
               </svg>
               <span className="text-ds-red">Reset All Materials</span>
             </button>
+
+            <button
+              role="menuitem"
+              onClick={() => {
+                setShowErrorTest('test')
+                setIsSettingsOpen(false)
+              }}
+              className="w-full text-left px-4 py-3 text-white hover:bg-ds-light-gray transition-colors duration-200
+                       flex items-center gap-3 text-sm sm:text-base"
+            >
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 text-ds-orange"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+              <span className="text-ds-orange">Test ErrorBoundary</span>
+            </button>
           </div>
         )}
       </div>
 
       <div className="max-w-4xl mx-auto flex flex-col gap-4 sm:gap-6">
+        {/* Error Boundary Test */}
+        {showErrorTest === 'test' && <ErrorTest />}
+
         {/* Materials Grid */}
         <div className="flex flex-col gap-3 sm:gap-4">
           {materials.map((material, materialIndex) => (

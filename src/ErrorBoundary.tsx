@@ -21,6 +21,18 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo)
+
+    // Log additional information for debugging
+    console.error('Error stack:', error.stack)
+    console.error('Component stack:', errorInfo.componentStack)
+
+    // Check if localStorage is available and working
+    try {
+      localStorage.setItem('error-test', 'test')
+      localStorage.removeItem('error-test')
+    } catch (localStorageError) {
+      console.error('localStorage is not available:', localStorageError)
+    }
   }
 
   handleReset = () => {
