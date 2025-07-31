@@ -75,8 +75,8 @@ function App() {
 
   // Handle click outside to close settings menu
   useEffect(() => {
-    const handleClickOutside = (event: Event) => {
-      if (settingsRef.current && event.target && !settingsRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (settingsRef.current && event.target && event.target instanceof Node && !settingsRef.current.contains(event.target)) {
         setIsSettingsOpen(false)
       }
     }
