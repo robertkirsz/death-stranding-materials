@@ -76,15 +76,18 @@ function App() {
   // Handle click outside to close settings menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (settingsRef.current && event.target instanceof Node && !settingsRef.current.contains(event.target)) {
+      if (
+        isSettingsOpen &&
+        settingsRef.current &&
+        event.target instanceof Node &&
+        !settingsRef.current.contains(event.target)
+      ) {
         setIsSettingsOpen(false)
       }
     }
 
-    if (isSettingsOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-      document.addEventListener('touchstart', handleClickOutside)
-    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
@@ -190,16 +193,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-ds-dark p-2 sm:p-4">
-      <div className="fixed top-1 left-1 text-xs text-slate-400 z-50 pointer-events-none">v{APP_VERSION}</div>
-      
+      <div className="fixed bottom-1 left-1 text-xs text-slate-400 z-50 pointer-events-none">v{APP_VERSION}</div>
+
       {/* Settings Button */}
       <div className="fixed top-2 right-2 z-50" ref={settingsRef}>
         <button
           id="settings-button"
           onClick={() => setIsSettingsOpen(!isSettingsOpen)}
           className="bg-ds-gray border border-ds-light-gray text-white p-2 sm:p-3 rounded-lg 
-                   hover:bg-ds-light-gray hover:border-ds-blue transition-all duration-200
-                   focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50
+                   opacity-60 hover:opacity-100 hover:bg-ds-light-gray hover:border-ds-blue
+                   transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ds-blue focus:ring-opacity-50
                    flex items-center justify-center"
           aria-label="Settings"
           aria-expanded={isSettingsOpen}
@@ -224,8 +227,8 @@ function App() {
 
         {/* Settings Dropdown Menu */}
         {isSettingsOpen && (
-          <div 
-            role="menu" 
+          <div
+            role="menu"
             aria-labelledby="settings-button"
             className="absolute right-0 top-full mt-2 w-48 sm:w-56 bg-ds-gray border border-ds-light-gray rounded-lg shadow-lg py-2 z-50"
           >
