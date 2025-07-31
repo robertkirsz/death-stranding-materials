@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import pkg from '../package.json'
+
+const APP_VERSION = pkg.version
 
 interface Material {
   name: string
@@ -166,6 +169,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-ds-dark p-2 sm:p-4">
+      <div className="fixed top-1 left-1 text-xs text-slate-400 z-50 pointer-events-none">v{APP_VERSION}</div>
+
       <div className="max-w-4xl mx-auto flex flex-col gap-4 sm:gap-6">
         {/* Materials Grid */}
         <div className="flex flex-col gap-3 sm:gap-4">
